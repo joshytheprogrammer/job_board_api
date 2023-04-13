@@ -11,11 +11,24 @@ const validateToken = require('./middleware/validateToken');
 dotenv.config();
 const app = express();
 
-mongoose.connect(process.env.DEV_MONGO_URL)
-.then(() => console.log("DB Connection Successful"))
-.catch((err) => {
-  console.log(err)
-});
+if(process.env.NODE_ENV == 'development') {
+  mongoose.connect(process.env.DEV_MONGO_URL)
+  .then(() => console.log("DB Connection Successful"))
+  .catch((err) => {
+    console.log(err)
+  });
+
+}else if(process.env.NODE_ENV == 'production') {
+  mongoose.connect(process.env.PROD_MONGO_URL)
+  .then(() => console.log("DB Connection Successful"))
+  .catch((err) => {
+    console.log(err)
+  });
+
+}
+
+
+console.log(process.env.NODE_ENV)
 
 app.use(cookieParser());
 

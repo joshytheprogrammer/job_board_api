@@ -11,35 +11,35 @@ const validateToken = require('./middleware/validateToken');
 dotenv.config();
 const app = express();
 
+app.use(cookieParser());
+
+app.use(cors({
+  credentials: true,
+  origin: ['*']
+}));
+
+app.use(bodyParser.json());
+
 if(process.env.NODE_ENV == 'development') {
   mongoose.connect(process.env.DEV_MONGO_URL)
-  .then(() => console.log("DB Connection Successful"))
+  .then(() => {
+    app.listen(process.env.PORT || 3000);
+  })
   .catch((err) => {
     console.log(err)
   });
 
 }else if(process.env.NODE_ENV == 'production') {
+
   mongoose.connect(process.env.PROD_MONGO_URL)
-  .then(() => console.log("DB Connection Successful"))
+  .then(() => {
+    app.listen(process.env.PORT || 3000);
+  })
   .catch((err) => {
     console.log(err)
   });
 
 }
-
-
-console.log(process.env.NODE_ENV)
-
-app.use(cookieParser());
-
-app.use(cors({
-  credentials: true,
-  origin: ['http://localhost:3000']
-}));
-
-app.use(bodyParser.json());
-
-app.listen(process.env.PORT || 3000);
 
 // Define routes
 app.use("/api/auth", auth);

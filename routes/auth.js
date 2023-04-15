@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
 
   try {
     if(!user) {
-      res.status(401).json("Wrong credentials!")
+      res.status(401).json({ message: 'Username and password are required!' })
       return
     }
   } catch(e) {

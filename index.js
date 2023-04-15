@@ -49,5 +49,6 @@ app.get('/api/protected', validateToken, (req, res) => {
   const user = req.user;
 
   // Handle request logic...
-  res.status(200).json({"message": `Operation Successful for user - ${user.name}`})
+  res.status(200).json({"data": user})
+  // res.status(200).json({"message": `Operation Successful for user - ${user.name}`})
 });

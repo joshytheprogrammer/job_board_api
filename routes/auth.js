@@ -4,9 +4,9 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User')
 
 // In real-world scenarios, these would be stored in a secure environment variable
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+// const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 // const accessTokenSecret = '6c03df6b0a6f186a6e1e70c2a6d12ce6de1ef6b90c6bb89a4d6e4c6b3ef4b4c3';
-const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+// const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 // const refreshTokenSecret = '9c5749c8e17d5bbd7a6343e5e5b74dc4d97d4c4f3dfc4a1d47475e13d1142a6';
 
 router.post('/login', async (req, res) => {
@@ -56,12 +56,17 @@ router.post('/signup', async (req, res) => {
     return res.status(400).json({ message: 'All fields are required!' });
   }
 
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res.status(409).json({ message: 'Email already exists' });
+  const emailExists = await User.findOne({ email });
+  if (emailExists) {
+    return res.status(400).json({ error: 'Email already exists' });
+  }
+  
+  // Check if user with same username already exists
+  const usernameExists = await User.findOne({ username });
+  if (usernameExists) {
+    return res.status(400).json({ error: 'Username already exists' });
   }
 
- 
   // Hash the password and add the new user to the array
   const hashedPassword = bcrypt.hashSync(password, 10);
  

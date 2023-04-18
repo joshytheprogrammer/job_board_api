@@ -87,10 +87,10 @@ router.get('/me', validateToken, (req, res) => {
   // Handle request logic...
   if(user) {
     res.status(200).json({"data": user})
-  }else {
-    res.status(401).json({"error": "User not found"})
   }
-  // res.status(200).json({"message": `Operation Successful for user - ${user.name}`})
+  
+  res.status(401).json({"error": "User not found"})
+  return
 });
  
 router.post('/refresh-token', (req, res) => {

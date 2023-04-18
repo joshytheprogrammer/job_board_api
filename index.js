@@ -6,6 +6,8 @@ const dotenv = require("dotenv");
 const cookieParser = require('cookie-parser');
 
 const auth = require("./routes/auth");
+const job = require("./routes/job")
+
 const validateToken = require('./middleware/validateToken');
 
 dotenv.config();
@@ -29,7 +31,9 @@ if(process.env.NODE_ENV == 'development') {
     console.log(err)
   });
 
-}else if(process.env.NODE_ENV == 'production') {
+}
+
+if(process.env.NODE_ENV == 'production') {
 
   mongoose.connect(process.env.PROD_MONGO_URL)
   .then(() => {
@@ -43,6 +47,7 @@ if(process.env.NODE_ENV == 'development') {
 
 // Define routes
 app.use("/api/auth", auth);
+app.use("/api/job", job);
 
 app.get('/api/protected', validateToken, (req, res) => {
   // Access user information from req.user object

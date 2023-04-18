@@ -85,12 +85,12 @@ router.get('/me', validateToken, (req, res) => {
   const user = req.user;
 
   // Handle request logic...
-  if(user) {
-    res.status(200).json({"data": user})
+  if(!user) {
+    res.status(401).json({"error": "User not found"});
+    return
   }
   
-  res.status(401).json({"error": "User not found"})
-  return
+  res.status(200).json({"data": user})
 });
  
 router.post('/refresh-token', (req, res) => {

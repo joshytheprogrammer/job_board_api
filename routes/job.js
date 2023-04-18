@@ -27,7 +27,13 @@ router.post('/create', validateToken, async (req, res) => {
 });
 
 router.get('/recent', validateToken, async (req, res) => {
-  const jobs = Job.find({status: ongoing}).exec();
+  // const jobs = await Job.find({status: 'ongoing'}).exec();
+  const jobs = await Job.find({ status: /ongoing/ }, 'creator_id title desc');
+
+  if(!jobs.length) {
+    res.status(200).json({"message": 'No jobs found.'});
+    return
+  }
 
   res.status(200).json({"jobs": jobs});
 });

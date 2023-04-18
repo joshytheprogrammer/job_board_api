@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 if(process.env.NODE_ENV == 'development') {
   mongoose.connect(process.env.DEV_MONGO_URL)
   .then(() => {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 5000);
   })
   .catch((err) => {
     console.log(err)
@@ -33,7 +33,7 @@ if(process.env.NODE_ENV == 'development') {
 
   mongoose.connect(process.env.PROD_MONGO_URL)
   .then(() => {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 5000);
   })
   .catch((err) => {
     console.log(err)
@@ -54,5 +54,4 @@ app.get('/api/protected', validateToken, (req, res) => {
   }else {
     res.status(401).json({"error": "User not found"})
   }
-  // res.status(200).json({"message": `Operation Successful for user - ${user.name}`})
 });

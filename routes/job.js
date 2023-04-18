@@ -26,8 +26,10 @@ router.post('/create', validateToken, async (req, res) => {
   }
 });
 
-router.get('/recent', async (req, res) => {
-  
+router.get('/recent', validateToken, async (req, res) => {
+  const jobs = Job.find({status: ongoing}).exec();
+
+  res.status(200).json({"jobs": jobs});
 });
 
 module.exports = router

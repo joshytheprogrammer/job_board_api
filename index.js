@@ -60,3 +60,5 @@ app.get('/api/protected', validateToken, (req, res) => {
     res.status(401).json({"error": "User not found"})
   }
 });
+
+module.exports = app;

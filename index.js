@@ -6,6 +6,9 @@ const dotenv = require("dotenv");
 const cookieParser = require('cookie-parser');
 
 const auth = require("./routes/auth");
+const job = require("./routes/job");
+const apply = require("./routes/apply");
+
 const validateToken = require('./middleware/validateToken');
 
 dotenv.config();
@@ -23,17 +26,19 @@ app.use(bodyParser.json());
 if(process.env.NODE_ENV == 'development') {
   mongoose.connect(process.env.DEV_MONGO_URL)
   .then(() => {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 5000);
   })
   .catch((err) => {
     console.log(err)
   });
 
-}else if(process.env.NODE_ENV == 'production') {
+}
+
+if(process.env.NODE_ENV == 'production') {
 
   mongoose.connect(process.env.PROD_MONGO_URL)
   .then(() => {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 5000);
   })
   .catch((err) => {
     console.log(err)
@@ -43,6 +48,8 @@ if(process.env.NODE_ENV == 'development') {
 
 // Define routes
 app.use("/api/auth", auth);
+app.use("/api/job", job);
+app.use("/api/apply", apply);
 
 app.get('/api/protected', validateToken, (req, res) => {
   // Access user information from req.user object
@@ -54,5 +61,6 @@ app.get('/api/protected', validateToken, (req, res) => {
   }else {
     res.status(401).json({"error": "User not found"})
   }
-  // res.status(200).json({"message": `Operation Successful for user - ${user.name}`})
 });
+
+module.exports = app;

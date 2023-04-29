@@ -1,13 +1,8 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/User')
-
-// In real-world scenarios, these would be stored in a secure environment variable
-// const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-// const accessTokenSecret = '6c03df6b0a6f186a6e1e70c2a6d12ce6de1ef6b90c6bb89a4d6e4c6b3ef4b4c3';
-// const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
-// const refreshTokenSecret = '9c5749c8e17d5bbd7a6343e5e5b74dc4d97d4c4f3dfc4a1d47475e13d1142a6';
+const validateToken = require('../middleware/validateToken');
+const User = require('../models/User');
 
 router.post('/login', async (req, res) => {
   // Check if username and password are provided
@@ -82,7 +77,19 @@ router.post('/signup', async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+router.get('/me', validateToken, (req, res) => {
+  // Access user information from req.user object
+  const user = req.user;
+
+  // Handle request logic...
+  if(!user) {
+    res.status(401).json({"error": "User not found"});
+    return
+  }
   
+  res.status(200).json({"data": user})
 });
  
 router.post('/refresh-token', (req, res) => {

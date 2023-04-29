@@ -38,8 +38,8 @@ router.get('/recent', validateToken, async (req, res) => {
   res.status(200).json({"jobs": jobs});
 });
 
-router.get('/', validateToken, async (req, res) => {
-  let jobID = req.query._id;
+router.get('/:id', validateToken, async (req, res) => {
+  let jobID = req.params.id;
 
   if(!jobID) {
     res.status(401).json({"message": 'No job ID sent!'});

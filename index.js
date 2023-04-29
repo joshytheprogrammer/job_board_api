@@ -6,7 +6,8 @@ const dotenv = require("dotenv");
 const cookieParser = require('cookie-parser');
 
 const auth = require("./routes/auth");
-const job = require("./routes/job")
+const job = require("./routes/job");
+const apply = require("./routes/apply");
 
 const validateToken = require('./middleware/validateToken');
 
@@ -48,6 +49,7 @@ if(process.env.NODE_ENV == 'production') {
 // Define routes
 app.use("/api/auth", auth);
 app.use("/api/job", job);
+app.use("/api/apply", apply);
 
 app.get('/api/protected', validateToken, (req, res) => {
   // Access user information from req.user object

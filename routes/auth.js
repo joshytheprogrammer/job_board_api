@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
 
   try {
     if(!user) {
-      res.status(401).json({ message: 'Username and password are required!' })
+      res.status(401).json({ message: 'User not found!!!' })
       return
     }
   } catch(e) {
@@ -53,13 +53,13 @@ router.post('/signup', async (req, res) => {
 
   const emailExists = await User.findOne({ email });
   if (emailExists) {
-    return res.status(400).json({ error: 'Email already exists' });
+    return res.status(400).json({ message: 'Email already exists' });
   }
   
   // Check if user with same username already exists
   const usernameExists = await User.findOne({ username });
   if (usernameExists) {
-    return res.status(400).json({ error: 'Username already exists' });
+    return res.status(400).json({ message: 'Username already exists' });
   }
 
   // Hash the password and add the new user to the array
@@ -85,7 +85,7 @@ router.get('/me', validateToken, (req, res) => {
 
   // Handle request logic...
   if(!user) {
-    res.status(401).json({"error": "User not found"});
+    res.status(401).json({message: "User not found"});
     return
   }
   

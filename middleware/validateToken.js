@@ -5,7 +5,7 @@ const validateToken = (req, res, next) => {
 
   // Check if authorization header is present
   if (!authHeader) {
-    return res.status(401).json({ error: 'Access token is required!' });
+    return res.status(401).json({ message: 'Access token is required!' });
   }
 
   // const token = authHeader.split(' ')[1];
@@ -18,7 +18,7 @@ const validateToken = (req, res, next) => {
     
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ message: 'Invalid token' });
   }
 };
 

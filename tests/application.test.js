@@ -38,6 +38,7 @@ describe('Application Controller Tests', () => {
           headline: 'Test Application Headline',
           details: 'Test Application Details',
         },
+        bid: 8000
       };
 
       const res = await request(app)
@@ -70,6 +71,7 @@ describe('Application Controller Tests', () => {
             headline: 'Application 1 Headline',
             details: 'Application 1 details'
           },
+          bid: 8000,
           files: null,
           status: 'pending'
         },
@@ -80,6 +82,7 @@ describe('Application Controller Tests', () => {
             headline: 'Application 2 Headline',
             details: 'Application 2 details'
           },
+          bid: 8000,
           files: null,
           status: 'accepted'
         },

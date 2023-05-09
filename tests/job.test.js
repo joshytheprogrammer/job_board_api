@@ -141,7 +141,6 @@ describe('Job Controller Tests', () => {
         .set('Authorization', token);
   
       expect(response.status).toBe(200);
-      console.log(response.body.jobs);
       expect(response.body.jobs.map(job => ({
         creator_id: job.creator_id,
         title: job.title,

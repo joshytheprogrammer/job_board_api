@@ -33,7 +33,9 @@ describe('Job Controller Tests', () => {
       const jobData = {
         title: 'Software Developer',
         desc: 'Develop software',
-        keywords: ['software', 'developer']
+        keywords: ['software', 'developer'],
+        lowest: 7500,
+        highest: 10000
       };
 
       const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
@@ -69,7 +71,9 @@ describe('Job Controller Tests', () => {
       const jobData = {
         title: 'Software Developer',
         desc: 'Develop software',
-        keywords: ['software', 'developer']
+        keywords: ['software', 'developer'],
+        lowest: 7500,
+        highest: 10000
       };
 
       const response = await request(app)
@@ -84,7 +88,9 @@ describe('Job Controller Tests', () => {
       const jobData = {
         title: 'Software Developer',
         desc: 'Develop software',
-        keywords: ['software', 'developer']
+        keywords: ['software', 'developer'],
+        lowest: 7500,
+        highest: 10000
       };
 
       const token = 'invalid-access-token';
@@ -107,14 +113,22 @@ describe('Job Controller Tests', () => {
           title: 'Software Developer',
           desc: 'Develop software',
           keywords: ['software', 'developer'],
-          status: 'ongoing'
+          status: 'ongoing',
+          offer: {
+            lowest: 7500,
+            highest: 10000
+          }
         },
         {
           creator_id: 'user2',
           title: 'UI Designer',
           desc: 'Design UI',
           keywords: ['ui', 'designer'],
-          status: 'ongoing'
+          status: 'ongoing',
+          offer: {
+            lowest: 7500,
+            highest: 10000
+          }
         }
       ];
   
@@ -134,6 +148,10 @@ describe('Job Controller Tests', () => {
         desc: job.desc,
         keywords: job.keywords,
         status: job.status,
+        offer: {
+          lowest: job.offer.lowest,
+          highest: job.offer.highest
+        }
       }))).toEqual(jobs);
     });
   
@@ -156,7 +174,11 @@ describe('Job Controller Tests', () => {
         title: 'Software Developer',
         desc: 'Develop software',
         keywords: ['software', 'developer'],
-        status: 'ongoing'
+        status: 'ongoing',
+        offer: {
+          lowest: 7500,
+          highest: 10000
+        }
       };
   
       const savedJob = await new Job(job).save();
@@ -173,6 +195,7 @@ describe('Job Controller Tests', () => {
       expect(response.body.job.desc).toEqual(job.desc);
       expect(response.body.job.keywords).toEqual(job.keywords);
       expect(response.body.job.status).toEqual(job.status);
+      expect(response.body.job.offer).toEqual(job.offer);
     });
   
     it('should return an error message if the job ID is invalid', async () => {

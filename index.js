@@ -11,6 +11,7 @@ const apply = require("./routes/apply");
 const admin = require("./routes/admin");
 
 const validateToken = require('./middleware/validateToken');
+const validateAdminToken = require('./middleware/validateAdminToken');
 
 dotenv.config();
 const app = express();

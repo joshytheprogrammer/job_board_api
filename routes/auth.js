@@ -69,7 +69,7 @@ router.post('/signup', async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: hashedPassword,
-    admin: false,
+    isAdmin: false,
   })
 
   try {

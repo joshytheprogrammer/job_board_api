@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const validateAdminToken = require('../middleware/validateAdminToken');
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -30,14 +31,26 @@ router.post('/login', async (req, res) => {
   // Prepare user data
   const data = {
     id: user._id,
-    name: user.username
+    name: user.username,
+    admin: user.isAdmin
   }
 
   // Generate tokens
   const adminAccessToken = jwt.sign({ user: data }, process.env.ADMIN_ACCESS_TOKEN_SECRET, { expiresIn: '1000m' });
 
   return res.status(200).json({ adminAccessToken });
+});
 
+router.get('/me', validateAdminToken, async (req, res) => {
+  const user = req.user;
+
+  // Handle request logic...
+  if(!user) {
+    res.status(401).json({message: "User not found"});
+    return
+  }
+  
+  res.status(200).json({"data": user})
 });
 
 module.exports = router

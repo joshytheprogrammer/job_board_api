@@ -18,6 +18,7 @@ router.post('/create', validateToken, async (req, res) => {
       headline: application.data.headline,
       details: application.data.details
     },
+    bid: application.bid,
     files: null,
     status: "pending"
   });
@@ -41,7 +42,7 @@ router.get('/user/:id', validateToken, async (req, res) => {
     return;
   }
 
-  const applications = await Application.find({user_id: userID}, '_id job_id data status');
+  const applications = await Application.find({user_id: userID}, '_id job_id data status bid');
 
   if(!applications.length) {
     res.status(200).json({"message": 'This user has not applied to any jobs'});

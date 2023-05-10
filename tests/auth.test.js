@@ -63,7 +63,7 @@ describe('Auth endpoints', () => {
         })
         .expect(400);
 
-      expect(res.body.error).toEqual('Email already exists');
+      expect(res.body.message).toEqual('Email already exists');
     });
 
     it('should return an error if username already exists', async () => {
@@ -76,7 +76,7 @@ describe('Auth endpoints', () => {
         })
         .expect(400);
 
-      expect(res.body.error).toEqual('Username already exists');
+      expect(res.body.message).toEqual('Username already exists');
     });
 
     it('should return an error if missing required fields', async () => {
@@ -107,7 +107,7 @@ describe('Auth endpoints', () => {
         .send({ username: 'nonexistentuser', password: user.password });
   
       expect(response.status).toBe(401);
-      expect(response.body.message).toBe('Username and password are required!');
+      expect(response.body.message).toBe('User not found!!!');
     });
   
     it('should return a 401 status if password is incorrect', async () => {
@@ -151,7 +151,7 @@ describe('Auth endpoints', () => {
       const res = await request(app).get('/api/auth/me');
   
       expect(res.status).toBe(401);
-      expect(res.body).toEqual({ error: 'Access token is required!' });
+      expect(res.body).toEqual({ message: 'Access token is required!' });
     });
   
     it('should return 401 if token is invalid', async () => {
@@ -162,7 +162,7 @@ describe('Auth endpoints', () => {
         .set('Authorization', `${token}`);
   
       expect(res.status).toBe(401);
-      expect(res.body).toEqual({ error: 'Invalid token' });
+      expect(res.body).toEqual({ message: 'Invalid token' });
     });
   
     it('should return 401 if user not found', async () => {
@@ -173,7 +173,7 @@ describe('Auth endpoints', () => {
         .set('Authorization', `${token}`);
   
       expect(res.status).toBe(401);
-      expect(res.body).toEqual({ error: 'User not found' });
+      expect(res.body).toEqual({ message: 'User not found' });
     });
   
     it('should return user information if token is valid and user is found', async () => {

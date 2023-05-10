@@ -14,6 +14,10 @@ router.post('/create', validateToken, async (req, res) => {
     creator_id: user.id,
     title: job.title,
     desc: job.desc,
+    offer: {
+      lowest: job.lowest,
+      highest: job.highest
+    },
     keywords: job.keywords,
     status: "ongoing"
   });
@@ -22,13 +26,14 @@ router.post('/create', validateToken, async (req, res) => {
     await newJob.save()
     res.status(201).json({ message: 'Job created successfully!' });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({message: 'The JOB array is required!'});
+    // res.status(500).json(err);
   }
 });
 
 router.get('/recent', validateToken, async (req, res) => {
   // const jobs = await Job.find({status: 'ongoing'}).exec();
-  const jobs = await Job.find({ status: /ongoing/ }, 'creator_id title desc');
+  const jobs = await Job.find({ status: /ongoing/ }, 'creator_id title desc keywords offer status');
 
   if(!jobs.length) {
     res.status(200).json({"message": 'No jobs found.'});

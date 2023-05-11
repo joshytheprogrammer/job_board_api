@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const JobSchema = new mongoose.Schema(
+const TagSchema = new mongoose.Schema(
   {
     tag_name: {type: String, required: true, unique: true},
     tag_state: {type: String, required: false}
@@ -8,4 +8,4 @@ const JobSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-module.exports = mongoose.model("Tag", JobSchema)
+module.exports = mongoose.model("Tag", TagSchema)

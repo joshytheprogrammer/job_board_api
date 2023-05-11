@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const auth = require("./routes/auth");
 const job = require("./routes/job");
 const tags = require("./routes/tags");
+const userTags = require("./routes/utags");
 const apply = require("./routes/apply");
 const admin = require("./routes/admin");
 
@@ -55,6 +56,7 @@ app.use("/api/job", job);
 app.use("/api/apply", apply);
 app.use("/api/admin", admin);
 app.use("/api/tags", tags);
+app.use("/api/utags", userTags);
 
 app.get('/api/protected', validateToken, (req, res) => {
   // Access user information from req.user object

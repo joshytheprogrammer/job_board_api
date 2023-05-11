@@ -72,24 +72,4 @@ router.get('/all', validateAdminToken, async (req, res) => {
   res.status(200).json({"tags": tags});
 });
 
-router.get('/', validateToken, async (req, res) => {
-  const tags = await Tag.find({ tag_state: /live/ }, 'tag_name');
-  
-  if(!tags.length) {
-    res.status(200).json({"message": 'No tags found.'});
-    return
-  }
-
-  res.status(200).json({"tags": tags});
-});
-
-router.post('/follow/:id', validateToken, async (req, res) => {
-
-});
-
-router.post('/unfollow/:id', validateToken, async (req, res) => {
-
-});
-
-
 module.exports = router

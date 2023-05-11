@@ -7,11 +7,12 @@ const cookieParser = require('cookie-parser');
 
 const auth = require("./routes/auth");
 const job = require("./routes/job");
+const tags = require("./routes/tags");
 const apply = require("./routes/apply");
 const admin = require("./routes/admin");
 
 const validateToken = require('./middleware/validateToken');
-const validateAdminToken = require('./middleware/validateAdminToken');
+// const validateAdminToken = require('./middleware/validateAdminToken');
 
 dotenv.config();
 const app = express();
@@ -53,6 +54,7 @@ app.use("/api/auth", auth);
 app.use("/api/job", job);
 app.use("/api/apply", apply);
 app.use("/api/admin", admin);
+app.use("/api/tags", tags);
 
 app.get('/api/protected', validateToken, (req, res) => {
   // Access user information from req.user object

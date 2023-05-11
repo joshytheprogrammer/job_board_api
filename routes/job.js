@@ -26,8 +26,7 @@ router.post('/create', validateToken, async (req, res) => {
     await newJob.save()
     res.status(201).json({ message: 'Job created successfully!' });
   } catch (err) {
-    res.status(500).json({message: 'The JOB array is required!'});
-    // res.status(500).json(err);
+    res.status(401).json({message: 'The JOB array is required!'});
   }
 });
 

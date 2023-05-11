@@ -63,7 +63,7 @@ describe('Job Controller Tests', () => {
         .send({ job: jobData })
         .set('Authorization', token);
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(401);
       expect(response.body.message).toBe('The JOB array is required!');
     });
 

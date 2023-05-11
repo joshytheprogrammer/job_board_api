@@ -46,7 +46,25 @@ router.post('/follow/', validateToken, async (req, res) => {
 });
 
 router.post('/unfollow/', validateToken, async (req, res) => {
-  const user = req.user;
+  const userID = req.user.id;
+  const tag = req.body.tag_name;
+
+  if(!tag) {
+    return res.status(401).json({message: "The tag name is required!"});
+  }
+  
+  let tags = await uTag.findOne({user_id: userID}, 'tags');
+
+  if(!tags) {
+    return res.status(401).json({message: "User doesn't follow any tags!!!"})
+  }
+
+  tags = tags.tags
+  tags = tags.filter(value => value !== tag);
+
+  await uTag.findOneAndUpdate({user_id: userID}, {tags: tags});
+
+  res.status(200).json({message: "Tag unfollowed successfully!"});
 });
 
 module.exports = router

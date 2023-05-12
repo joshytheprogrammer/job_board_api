@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
   }
 
   // Generate tokens
-  const accessToken = jwt.sign({ user: data }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20m' });
+  const accessToken = jwt.sign({ user: data }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10080m' });
   const refreshToken = jwt.sign({ user: data }, process.env.REFRESH_TOKEN_SECRET);
 
   return res.status(200).json({ accessToken, refreshToken });

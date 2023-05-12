@@ -2,7 +2,7 @@ const router = require('express').Router();
 const validateToken = require('../middleware/validateToken');
 const Application = require('../models/Application');
 const Job = require('../models/Job');
-const { off } = require('../models/Tag');
+const Rejection = require("../models/Rejection")
 
 router.post('/create', validateToken, async (req, res) => {
   // const { application } = req.body.application;
@@ -54,7 +54,12 @@ router.get('/user/:id', validateToken, async (req, res) => {
 
 router.post('/reject/', validateToken, async (req, res) => {
   const appID = req.body.app_id;
+  const reason = req.body.reason;
   const userID = req.user.id;
+
+  if(!appID || !reason) {
+    return res.status(400).json({message: 'The application ID and rejection reason are required!'});
+  }
 
   // Retrieve user application details
   const app = await Application.findById(appID, 'user_id job_id status');
@@ -73,7 +78,15 @@ router.post('/reject/', validateToken, async (req, res) => {
     return res.status(400).json({"message": 'Only the user that created an application can reject it!'});
   }
 
-  if(!await Application.findByIdAndUpdate(appID, {status: "rejected"})){
+  const newRejection = new Rejection({
+    application_id: appID,
+    reason: reason
+  });
+
+  try{
+    await Application.findByIdAndUpdate(appID, {status: "rejected"});
+    await newRejection.save();
+  }catch(e) {
     return res.status(400).json({"message": 'An error occurred. Contact administrator!!!'});
   }
 
@@ -101,22 +114,36 @@ router.post('/accept/', validateToken, async (req, res) => {
     return res.status(400).json({"message": 'Only the user that created an application can reject it!'});
   }
 
-  if(!await Application.findByIdAndUpdate(appID, {status: "accepted"})){
+  // Update the Application Status
+  try{
+    await Application.findByIdAndUpdate(appID, {status: "accepted"})
+  }catch(e) {
     return res.status(400).json({"message": 'An error occurred. Contact administrator!!!'});
   }
 
+  // Return a response to save time.
   res.status(200).json({message: "Application accepted successfully"});
 
   // Reject all Applications when one is accepted
   try{
-    await Application.updateMany({job_id: jobID, status: "pending"}, {status: "rejected"});
-    // It is at this point you need to enter all rejections into the DB. For rejection reasons.
+    await Application.updateMany(
+      { job_id: jobID, status: "pending" },
+      { status: "rejected" },
+    );
+
+    // Query for all rejected applications and create a Rejection entry for each one
+    const rejectedApplications = await Application.find({job_id: jobID, status: "rejected"});
+    
+    for (const application of rejectedApplications) {
+      await Rejection.create({ application_id: application._id, reason: "A different candidate was chosen" });
+    }
+
   }catch(e) {
     console.log("Attempt to reject all applications - failed. This may cause errors.");
     console.log({error: e});
   }
 
-  // Close Job when one application is rejected
+  // Close Job when one application is accepted
   try{
     await Job.findOneAndUpdate(jobID, {status: "closed"});
   }catch(e) {

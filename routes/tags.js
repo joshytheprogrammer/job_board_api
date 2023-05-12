@@ -20,7 +20,7 @@ router.post('/create', validateAdminToken, async (req, res) => {
   });
 
   try {
-    await newTag.save()
+    await newTag.save();
     res.status(201).json({ message: 'Tag created successfully!' });
   } catch (err) {
     res.status(401).json({message: 'An error occurred!'});

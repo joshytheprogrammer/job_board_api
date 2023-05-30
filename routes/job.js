@@ -32,7 +32,7 @@ router.post('/create', validateToken, async (req, res) => {
 
 router.get('/recent', validateToken, async (req, res) => {
   // const jobs = await Job.find({status: 'ongoing'}).exec();
-  const jobs = await Job.find({ status: /ongoing/ }, 'creator_id title desc keywords offer status');
+  const jobs = await Job.find({ status: /ongoing/ }, 'creator_id title desc keywords offer status').limit(50);
 
   if(!jobs.length) {
     res.status(200).json({"message": 'No jobs found.'});

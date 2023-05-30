@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use(cors({
   credentials: true,
-  origin: ['*']
+  origin: ['localhost:3000']
 }));
 
 app.use(bodyParser.json());
